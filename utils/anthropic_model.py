@@ -7,6 +7,18 @@ from anthropic.types import Message, MessageParam
 from env_vars import ENV
 from types import ChatMessage
 
+def get_anthropic_client_sync() -> Anthropic:
+    if ENV.ANTHROPIC_API_KEY is None:
+        raise Exception("Missing Anthropic API key.")
+    return Anthropic(api_key=ENV.ANTHROPIC_API_KEY)
+
+
+def get_anthropic_client_async() -> AsyncAnthropic:
+    if ENV.ANTHROPIC_API_KEY is None:
+        raise Exception("Missing Anthropic API key.")
+    return AsyncAnthropic(api_key=ENV.ANTHROPIC_API_KEY)
+
+
 async def get_anthropic_chat_completion_async(
     client: AsyncAnthropic,
     messages: list[ChatMessage],
@@ -33,18 +45,6 @@ async def get_anthropic_chat_completion_async(
         temperature=temperature,
         system=system if system is not None else NOT_GIVEN,
     )
-
-
-def get_anthropic_client_sync() -> Anthropic:
-    if ENV.ANTHROPIC_API_KEY is None:
-        raise Exception("Missing Anthropic API key; check your .env")
-    return Anthropic(api_key=ENV.ANTHROPIC_API_KEY)
-
-
-def get_anthropic_client_async() -> AsyncAnthropic:
-    if ENV.ANTHROPIC_API_KEY is None:
-        raise Exception("Missing Anthropic API key; check your .env")
-    return AsyncAnthropic(api_key=ENV.ANTHROPIC_API_KEY)
 
 
 async def get_anthropic_batch_chat_completions_async(
@@ -80,13 +80,10 @@ async def get_anthropic_batch_chat_completions_async(
 
 
 def parse_anthropic_completion(response: Message | None) -> str | None:
-    if response is None:
+    if not response:
         return None
     try:
-        first_content = response.content[0]
-        if first_content.type == "text":
-            return first_content.text
-        else:
-            return None
+        message_content = response.content[0]
+        return message_content.text if message_content.type == "text" else None
     except (AttributeError, IndexError):
         return None
