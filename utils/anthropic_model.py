@@ -19,15 +19,17 @@ async def get_anthropic_chat_completion_async(
     """
     
     system = messages[0]["content"] if messages[0]["role"] == "system" else None
+    
+    message_params = [
+        MessageParam(role=m["role"], content=m["content"])
+        for m in messages
+        if m["role"] != "system"
+    ]
 
     return await client.messages.create(
         model=model_name,
         max_tokens=max_new_tokens,
-        messages=[
-            MessageParam(role=m["role"], content=m["content"])
-            for m in messages
-            if m["role"] != "system"
-        ],
+        messages=message_params,
         temperature=temperature,
         system=system if system is not None else NOT_GIVEN,
     )
@@ -68,7 +70,7 @@ async def get_anthropic_batch_chat_completions_async(
         async with semaphore:
             try:
                 return await base_func(client=client, messages=messages)
-            except Exception as e:  # This will catch any exception, including those from backoff
+            except Exception as e:
                 print(f"Error in get_anthropic_chat_completion_async: {e}. Returning None.")
                 return None
 
