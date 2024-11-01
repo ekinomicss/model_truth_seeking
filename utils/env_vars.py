@@ -40,4 +40,3 @@ def find_env_file():
 
 ENV = EnvironmentVariables.load_from_env()
 
-print(find_env_file())

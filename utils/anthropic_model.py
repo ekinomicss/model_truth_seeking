@@ -14,6 +14,10 @@ async def get_anthropic_chat_completion_async(
     max_new_tokens: int = 32,
     temperature: float = 1.0,
 ) -> Message:
+    """
+    Makes a single async chat completion request to Anthropic API.
+    """
+    
     system = messages[0]["content"] if messages[0]["role"] == "system" else None
 
     return await client.messages.create(
@@ -41,7 +45,7 @@ def get_anthropic_client_async() -> AsyncAnthropic:
     return AsyncAnthropic(api_key=ENV.ANTHROPIC_API_KEY)
 
 
-async def get_anthropic_chat_completions_async(
+async def get_anthropic_batch_chat_completions_async(
     client: AsyncAnthropic,
     messages_list: list[list[ChatMessage]],
     model_name: str,
@@ -49,6 +53,9 @@ async def get_anthropic_chat_completions_async(
     temperature: float = 1.0,
     max_concurrency: int = 100,
 ):
+    """    
+    Processes multiple chat completion requests concurrently with rate limiting.
+    """
     base_func = partial(
         get_anthropic_chat_completion_async,
         model_name=model_name,

@@ -1,7 +1,16 @@
 import pandas as pd
 import numpy as np
 import openAI
+from openai import OpenAI
 from typing import Optional
+
+
+class GetModel():
+
+    def __init__(self, model):
+        self.model = model 
+
+    
 
 
 class EvaluateModel():
