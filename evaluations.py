@@ -22,7 +22,8 @@ class EvaluateModel():
 
     def run_eval(self, message):
         if self.model == "Anthropic":
-            client = anthropic.Anthropic()
+            mainDebater = anthropic.Anthropic()
+            otherDebater = anthropic.Anthropic()
             messages = [
                 {
                     "role": "user",
@@ -30,19 +31,27 @@ class EvaluateModel():
                 }
             ]
             response = get_anthropic_chat_completion(
-                            client=client, 
+                            client=mainDebater, 
                             messages=messages, 
                             model_name="claude-3-sonnet-20240229",
-                            max_new_tokens=1000  # This maps to max_tokens in the API
+                            max_new_tokens=1000  
                         )
-            print(parse_anthropic_completion(response))
+            print("-->MAIN MODEL:\n----------\n" + parse_anthropic_completion(response) + "\n")
+            responses = [
+                {
+                    "role": "user",
+                    "content": "Can you debate this response?" + parse_anthropic_completion(response)
+                }
+            ]
+            response = get_anthropic_chat_completion(
+                            client=otherDebater, 
+                            messages=responses, 
+                            model_name="claude-3-sonnet-20240229",
+                            max_new_tokens=1000 
+                        )
+            print("-->OTHER MODEL:\n-----------\n" + parse_anthropic_completion(response))
 
 
 if __name__ == "__main__":
     eval_model = EvaluateModel(model="Anthropic", method="debate", second_model=False)
-    eval_model.run_eval("Hello are you ready to debate?")
-    
-
-
-
-
+    eval_model.run_eval("Hi! We will be debating about whether November is a rainy season month in Costa Rica, based on information from the internet and form an argument.")
