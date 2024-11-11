@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from eval_utils.anthropic_model import get_anthropic_chat_completion, parse_anthropic_completion
 
 class GetModel():
-
     def __init__(self, model):
         self.model = model 
 
@@ -15,12 +14,12 @@ class EvaluateModel():
     Evaluate a language model for a given truth-seeking method. 
     """
 
-    def __init__(self, model, method, second_model=False):
+    def __init__(self, model: str, method: str, second_model: bool = False):
         self.model = model
         self.method = method 
         self.second_model = second_model
 
-    def run_eval(self, message):
+    def run_eval(self, message: str):
         if self.model == "Anthropic":
             mainDebater = anthropic.Anthropic()
             otherDebater = anthropic.Anthropic()
