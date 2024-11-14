@@ -4,10 +4,6 @@ import anthropic
 from dotenv import load_dotenv
 from eval_utils.anthropic_model import get_anthropic_chat_completion, parse_anthropic_completion
 
-class GetModel():
-    def __init__(self, model):
-        self.model = model 
-
 
 class EvaluateModel():
     """
