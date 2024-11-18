@@ -294,7 +294,8 @@ async def main():
         async_mode=True
     )
     
-    topic = "Is November a rainy season month in Costa Rica?"
+    # topic = "Is November a rainy season month in Costa Rica?"
+    topic = "Is authentic love possible in Sartre's framework?"
     results = await debate.conduct_debate(topic)
     
     debate.save_debate_record("debate_record.json")
