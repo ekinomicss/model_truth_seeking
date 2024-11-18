@@ -76,7 +76,7 @@ class DebateFramework:
         EXPLANATIONS:
         [Provide brief explanations for each score]
 
-        VERDICT:
+        VERDICT: [name of winner agent]
         [Your final judgment and analysis]
         """
     
@@ -214,6 +214,17 @@ class DebateFramework:
             return scores
         except Exception:
             return scores
+        
+    def _parse_verdict(self, judgment_text: str) -> Dict:
+        """Parse verdict from judgment text using regex."""
+        try:
+            verdict_pattern = r"(?:VERDICT|Final Verdict):\s*([^.\n]*)"
+            match = re.search(verdict_pattern, judgment_text, re.IGNORECASE)
+            return {
+                "verdict": match.group(1).strip() if match else "No verdict found"
+            }
+        except Exception:
+            return {"verdict": "Error parsing verdict"}
 
     async def _get_judgment(self) -> Dict:
         """Get final judgment on the debate (async)."""
@@ -222,7 +233,7 @@ class DebateFramework:
         judgment_response = await self._get_response_async(self.judge, judgment_prompt)
         
         return {
-            "final_judgment": judgment_response,
+            "final_judgment": self._parse_verdict(judgment_response),
             "criteria_scores": self._parse_judgment_scores(judgment_response)
         }
     
