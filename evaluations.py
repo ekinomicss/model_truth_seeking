@@ -201,7 +201,7 @@ class DebateFramework:
         
         try:
             patterns = {
-                "agent": r"Agent\s*(\d+)(?:/10)",
+                "agent": r"Verdict\s*(\d+)(?:/10)",
                 "evidence_quality": r"Evidence Quality:\s*(\d+)(?:/10)?",
                 "logical_consistency": r"Logical Consistency:\s*(\d+)(?:/10)?",
                 "counterargument_handling": r"Counterargument Handling:\s*(\d+)(?:/10)?",
