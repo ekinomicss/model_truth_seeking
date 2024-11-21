@@ -76,7 +76,7 @@ class DebateFramework:
         EXPLANATIONS:
         [Provide brief explanations for each score]
 
-        VERDICT: [name of winner agent]
+        VERDICT: [name of winner agent and their stance]
         [Your final judgment and analysis]
         """
     
@@ -192,6 +192,7 @@ class DebateFramework:
     def _parse_judgment_scores(self, judgment_text: str) -> Dict:
         """Parse numerical scores from judgment text using regex."""
         scores = {
+            "agent": "zzz",
             "evidence_quality": 0,
             "logical_consistency": 0,
             "counterargument_handling": 0,
@@ -200,6 +201,7 @@ class DebateFramework:
         
         try:
             patterns = {
+                "agent": r"Agent\s*(\d+)(?:/10)",
                 "evidence_quality": r"Evidence Quality:\s*(\d+)(?:/10)?",
                 "logical_consistency": r"Logical Consistency:\s*(\d+)(?:/10)?",
                 "counterargument_handling": r"Counterargument Handling:\s*(\d+)(?:/10)?",
@@ -306,12 +308,14 @@ async def main():
     )
     
     # topic = "Is November a rainy season month in Costa Rica?"
-    topic = "Is authentic love possible in Sartre's framework?"
+    # topic = "Is authentic love possible in Sartre's framework?"
+    topic = "Was congestion pricing successful in London?"
     results = await debate.conduct_debate(topic)
     
     debate.save_debate_record("debate_record.json")
     
     loaded_record = debate.load_debate_record("debate_record.json")
+
     print(f"\nDebate Topic: {loaded_record['topic']}")
     print("\nFinal Judgment:", loaded_record["judgment"]["result"])
     print("\nScores:", json.dumps(loaded_record["judgment"]["scores"], indent=2))
