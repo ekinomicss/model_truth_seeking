@@ -13,9 +13,9 @@ from eval_utils.anthropic_model import (
     parse_anthropic_completion
 )
 
-class DebateFramework:
+class DebateMethod:
     """
-    Implements an AI debate framework where two AI models engage in structured debate
+    Implements an AI debate method where two AI models engage in structured debate
     with multiple rounds of discussion.
     """
     
@@ -28,7 +28,7 @@ class DebateFramework:
         judge_criteria: Optional[str] = None,
         async_mode: bool = True
     ):
-        """Initialize debate framework with configurable parameters."""
+        """Initialize debate method with configurable parameters."""
         self.num_rounds = num_rounds
         self.max_tokens = max_tokens_per_response
         self.temperature = temperature
@@ -300,7 +300,7 @@ class DebateFramework:
 
 async def main():
     # Example debate
-    debate = DebateFramework(
+    debate = DebateMethod(
         num_rounds=3,
         max_tokens_per_response=1000,
         temperature=0.7,
@@ -308,7 +308,7 @@ async def main():
     )
     
     # topic = "Is November a rainy season month in Costa Rica?"
-    # topic = "Is authentic love possible in Sartre's framework?"
+    # topic = "Is authentic love possible in Sartre's method?"
     topic = "Was congestion pricing successful in London?"
     results = await debate.conduct_debate(topic)
     
