@@ -304,7 +304,8 @@ async def main():
         num_rounds=3,
         max_tokens_per_response=1000,
         temperature=0.7,
-        async_mode=True
+        async_mode=True,
+        model_name="claude-3-sonnet-20240229"
     )
     
     # topic = "Is November a rainy season month in Costa Rica?"
